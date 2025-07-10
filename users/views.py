@@ -92,12 +92,15 @@ class RegisterView(APIView):
     permission_classes = [AllowAny]
     serializer_class = UserSerializer
 
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
         serializer = RegisterSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
         user = serializer.save()
+
         response = Response(UserSerializer(user).data, status=status.HTTP_201_CREATED)
-        
+
+        return response
     
 class LogoutView(APIView):
 

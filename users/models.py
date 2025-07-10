@@ -11,8 +11,8 @@ def generate_username(first_name, last_name, length=3):
     base_username = f"{first_name.lower()}_{last_name.lower()}"
     return f"{base_username}{''.join(choices(digits, k=length))}"
 
-def generate_password(length=8):
-    return ''.join(choices(ascii_letters + digits, k=length))
+def generate_password(length=7):
+    return ''.join(choices(ascii_letters + digits, k=length))+"$"
 
 REGION_CHOICE = [(viloyat, viloyat) for viloyat in REGION_CITY.keys()]
 CITY_CHOICE = [(city, f"{region} viloyati - {city} tumani") for region, citylar in REGION_CITY.items() for city in citylar]
@@ -77,6 +77,7 @@ class CustomUser(AbstractUser):
     region = models.CharField(max_length=256, blank=True, null=True)
     city = models.CharField(max_length=256, blank=True, null=True)
 
+    see_password = models.CharField(max_length=100, null=True, blank=True, editable=False)
     objects = CustomUserManager()
 
     def save(self, *args, **kwargs):

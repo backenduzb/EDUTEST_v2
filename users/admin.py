@@ -1,35 +1,59 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from .models import CustomUser, Schools
+from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
+from django.contrib import messages
+from .models import CustomUser
+from .forms import CustomUserCreationForm, CustomUserChangeForm
+from .models import CustomUser, Schools, generate_username
 
-class CustomUserCreationForm(UserCreationForm):
-    class Meta:
-        model = CustomUser
-        fields = ('username',)
 
-class CustomUserChangeForm(UserChangeForm):
-    class Meta:
-        model = CustomUser
-        fields = ('username',)
-
+@admin.register(CustomUser)
 class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
     model = CustomUser
-    list_display = ['username', 'is_staff', 'is_active','is_teacher','is_student']
+    list_display = ['username', 'is_staff', 'is_active', 'is_teacher', 'is_student']
+    search_fields = ['is_teacher','is_student']
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
-        ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser','is_teacher','is_student','region','city','class_letter','class_number','school_token','info_token','students_token','class_raiting','student_raiting')}),
+        ('Permissions', {
+            'fields': (
+                'is_active', 'is_staff', 'is_superuser',
+                'is_teacher', 'is_student',
+                'region', 'city',
+                'class_letter', 'class_number',
+                'school_token', 'info_token', 'students_token',
+                'class_raiting', 'student_raiting'
+            )
+        }),
     )
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('username', 'password1', 'password2', 'is_active', 'is_staff', 'is_superuser', 'is_teacher','is_student','region','city','class_letter','class_number','school_token','info_token','students_token','class_raiting','student_raiting')}
-        ),
+            'fields': (
+                'first_name', 'last_name',
+                'username', 'password1', 'password2',
+                'is_active', 'is_staff', 'is_superuser',
+                'is_teacher', 'is_student',
+                'region', 'city',
+                'class_letter', 'class_number',
+                'school_token', 'info_token', 'students_token',
+                'class_raiting', 'student_raiting'
+            )
+        }),
     )
 
-admin.site.register(CustomUser, CustomUserAdmin)
+    def save_model(self, request, obj, form, change):
+        if not change:
+            if not obj.username:
+                obj.username = generate_username(obj.first_name or 'user', obj.last_name or 'name')
+
+            password = form.cleaned_data.get('password1')
+            if password:
+                messages.success(request, f"Foydalanuvchining paroli: {password}")
+
+        super().save_model(request, obj, form, change)
 
 @admin.register(Schools)
 class SchoolAdmin(admin.ModelAdmin):

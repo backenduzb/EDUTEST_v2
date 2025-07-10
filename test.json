@@ -1,3 +1,14 @@
 {
-    "user_answer":"A"
+    "username":"vicjon",
+    "password":"123456@aA",
+    "password2":"123456@aA",
+    "is_students":true,
+    "is_teachers":false,
+    "is_admin":false,
+    "is_superuser":false,
+    "is_active":true,
+    "is_staff":false,
+    "first_name":"Vic",
+    "last_name":"Jsa",
+    "info_token":"1234567890abcdef"
 }
