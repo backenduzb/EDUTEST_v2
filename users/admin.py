@@ -13,7 +13,7 @@ class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
     model = CustomUser
-    list_display = ['username', 'is_staff', 'is_active', 'is_teacher', 'is_student']
+    list_display = ['username', 'is_staff', 'is_active', 'is_teacher', 'is_student','see_password']
     search_fields = ['is_teacher','is_student']
     fieldsets = (
         (None, {'fields': ('username', 'password')}),

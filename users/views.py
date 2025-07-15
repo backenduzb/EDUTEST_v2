@@ -71,7 +71,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
             key='access_token',
             value=data['access'],
             httponly=True,
-            secure=True,
+            secure=False,
             samesite='Lax',
             max_age=604800
         )
@@ -80,7 +80,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
             key='refresh_token',
             value=data['refresh'],
             httponly=True,
-            secure=True,
+            secure=False,
             samesite='Lax',
             max_age=604800
         )
